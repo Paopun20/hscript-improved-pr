@@ -251,7 +251,11 @@ class ClassExtendMacro {
 
 						var name = f.name;
 
-						var arguments = fun.args == null ? [] : [for(a in fun.args) macro $i{a.name}];
+						var arguments:Array<Expr> = [];
+						if (fun.args != null) {
+							for (a in fun.args)
+								arguments.push(macro $i{a.name});
+						}
 
 						if (returns) {
 							overrideExpr = macro {
@@ -483,9 +487,8 @@ class ClassExtendMacro {
 					if (__interp != null) {
 						if(__class__fields.contains(name)) {
 							var v:Dynamic = __interp.variables.get(name);
-							var ba:Bool = @:privateAccess __interp.isBypassAccessor;
 							if(v != null && v is hscript.Property) 
-								return cast(v, hscript.Property).get(ba);
+								return cast(v, hscript.Property).callGetter(name);
 							return v;
 						}
 						else @:privateAccess {
@@ -509,9 +512,8 @@ class ClassExtendMacro {
 					if (__interp != null) {
 						if(__class__fields.contains(name)) {
 							var v:Dynamic = __interp.variables.get(name);
-							var ba:Bool = @:privateAccess __interp.isBypassAccessor;
 							if(v != null && v is hscript.Property) 
-								return cast(v, hscript.Property).get(ba);
+								return cast(v, hscript.Property).callGetter(name);
 							return v;
 						}
 						else @:privateAccess {
@@ -537,9 +539,8 @@ class ClassExtendMacro {
 					if (__interp != null) {
 						if(__class__fields.contains(name)) {
 							var v:Dynamic = __interp.variables.get(name);
-							var ba:Bool = @:privateAccess __interp.isBypassAccessor;
 							if(v != null && v is hscript.Property) 
-								return cast(v, hscript.Property).set(val, ba);
+								return cast(v, hscript.Property).callSetter(name, val);
 							__interp.variables.set(name, val);
 							return val;
 						}
@@ -568,9 +569,8 @@ class ClassExtendMacro {
 					if (__interp != null) {
 						if(__class__fields.contains(name)) {
 							var v:Dynamic = __interp.variables.get(name);
-							var ba:Bool = @:privateAccess __interp.isBypassAccessor;
 							if(v != null && v is hscript.Property) 
-								return cast(v, hscript.Property).set(val, ba);
+								return cast(v, hscript.Property).callSetter(name, val);
 							__interp.variables.set(name, val);
 							return val;
 						}
